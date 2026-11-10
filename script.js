@@ -300,43 +300,102 @@
     });
   }
 
-  // Music player (placeholder playlist - user adds files to assets/music/)
+  // Music player: built-in cute tune (no files needed) + optional local files
   const playlist = [
-    // Add your files here, e.g. { title: 'Raske Kamar', src: 'assets/music/raske-kamar.mp3' }
+    { title: 'Cute Bhai Dooj Tune (built-in)', type: 'builtin' },
+    // Add your own files here, e.g. { title: 'Raske Kamar', src: 'assets/music/raske-kamar.mp3' }
   ];
   let track = 0;
+  let builtinPlaying = false;
+  let builtinTimer = null;
+  let builtinStep = 0;
   const audio = document.getElementById('audio');
   const toggleBtn = document.getElementById('music-toggle');
   const nextBtn = document.getElementById('music-next');
   const titleEl = document.getElementById('music-title');
   const eq = document.getElementById('eq');
 
+  function playBuiltinNote(freq, start, dur, vol=0.05) {
+    const ctx = ensureAudioCtx(); if (!ctx) return;
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(freq, start);
+    g.gain.setValueAtTime(0.0001, start);
+    g.gain.exponentialRampToValueAtTime(vol, start + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+    o.connect(g).connect(ctx.destination);
+    o.start(start);
+    o.stop(start + dur + 0.02);
+  }
+  function stopBuiltin() {
+    builtinPlaying = false;
+    if (builtinTimer) clearTimeout(builtinTimer);
+    builtinTimer = null;
+  }
+  function startBuiltin() {
+    const ctx = ensureAudioCtx(); if (!ctx) return;
+    builtinPlaying = true;
+    const melody = [523.25,659.25,783.99,659.25,698.46,783.99,880,783.99,659.25,587.33,659.25,523.25];
+    const beat = 0.28;
+    const loop = () => {
+      if (!builtinPlaying) return;
+      const now = ctx.currentTime + 0.05;
+      for (let i=0;i<4;i++) {
+        const f = melody[(builtinStep + i) % melody.length];
+        playBuiltinNote(f, now + i*beat, beat*0.9, i%2===0?0.045:0.03);
+        if (i%2===0) playBuiltinNote(f/2, now + i*beat, beat*0.85, 0.02);
+      }
+      builtinStep = (builtinStep + 4) % melody.length;
+      builtinTimer = setTimeout(loop, beat*4*1000);
+    };
+    loop();
+  }
+
   function loadTrack(i) {
     if (!playlist.length) return;
+    stopBuiltin();
+    audio.pause();
     track = (i + playlist.length) % playlist.length;
-    audio.src = playlist[track].src;
-    titleEl.textContent = playlist[track].title;
+    const t = playlist[track];
+    titleEl.textContent = t.title;
+    if (t.type !== 'builtin') {
+      audio.src = t.src;
+    } else {
+      audio.removeAttribute('src');
+      audio.load();
+    }
   }
   function updateMusicUI() {
-    const playing = !audio.paused && playlist.length;
+    const t = playlist[track];
+    const playing = t && t.type === 'builtin' ? builtinPlaying : (!audio.paused && !!audio.src);
     toggleBtn.textContent = playing ? '⏸' : '▶';
     eq.classList.toggle('hidden', !playing);
   }
   toggleBtn.addEventListener('click', async () => {
-    if (!playlist.length) { titleEl.textContent = 'Add songs in assets/music/'; return; }
-    if (!audio.src) loadTrack(0);
-    if (audio.paused) { try { await audio.play(); } catch(e) {} } else { audio.pause(); }
+    if (!playlist.length) return;
+    if (!titleEl.textContent || titleEl.textContent.includes('Add your songs')) loadTrack(track);
+    const t = playlist[track];
+    if (t.type === 'builtin') {
+      if (builtinPlaying) stopBuiltin(); else startBuiltin();
+    } else {
+      if (!audio.src) loadTrack(track);
+      if (audio.paused) { try { await audio.play(); } catch(e) {} } else { audio.pause(); }
+    }
     updateMusicUI();
   });
   nextBtn.addEventListener('click', async () => {
     if (!playlist.length) return;
     loadTrack(track + 1);
-    try { await audio.play(); } catch(e) {}
+    const t = playlist[track];
+    if (t.type === 'builtin') startBuiltin();
+    else { try { await audio.play(); } catch(e) {} }
     updateMusicUI();
   });
-  audio.addEventListener('ended', () => { if (playlist.length) { loadTrack(track + 1); audio.play().catch(()=>{}); } });
+  audio.addEventListener('ended', () => { if (playlist.length) { loadTrack(track + 1); const t=playlist[track]; if(t.type==='builtin') startBuiltin(); else audio.play().catch(()=>{}); updateMusicUI(); } });
   audio.addEventListener('play', updateMusicUI);
   audio.addEventListener('pause', updateMusicUI);
+  loadTrack(0);
 
   // SFX toggle (page turn sound)
   const sfxBtn = document.getElementById('sfx-toggle');
