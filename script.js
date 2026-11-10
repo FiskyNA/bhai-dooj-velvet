@@ -351,6 +351,24 @@
   // unlock audio context on first interaction
   ['click','touchstart','keydown'].forEach(ev => window.addEventListener(ev, () => ensureAudioCtx(), { once: true, passive: true }));
 
+  // Global cool click sparkles
+  document.addEventListener('click', (e) => {
+    if (journey.classList.contains('hidden')) return;
+    if (e.target.closest('button,a,.flip-card,.sweet,.polaroid,.photo-frame')) return;
+    burstSparkles(e.clientX, e.clientY, 6);
+  });
+
+  // 3D tilt on flip cards
+  document.querySelectorAll('.flip-card:not(.main-card)').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left)/r.width - 0.5;
+      const y = (e.clientY - r.top)/r.height - 0.5;
+      card.style.transform = `perspective(700px) rotateY(${x*10}deg) rotateX(${y*-10}deg)`;
+    });
+    card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+  });
+
   // Scene parallax & ambient sparkles
   const sceneWrap = document.getElementById('scene-wrap');
   if (sceneWrap) {
@@ -407,11 +425,18 @@
     });
   }
 
-  // Virtual tilak (supports optional photo: assets/photos/tilak.jpg|png|jpeg|webp)
+  // Virtual tilak - animated hand applies tilak (supports optional photo: assets/photos/tilak.jpg|png|jpeg|webp)
   const tilakBtn = document.getElementById('tilak-btn');
   const tilakWrap = document.getElementById('tilak-photo-wrap');
   const tilakPhoto = document.getElementById('tilak-photo');
   const tilakMsg = document.getElementById('tilak-msg');
+  const tilakScene = document.getElementById('tilak-scene');
+  const tilakProgress = document.getElementById('tilak-progress-bar');
+  let tilakApplying = false;
+  let tilakDone = false;
+  let tilakHoldTimer = null;
+  let tilakProgressVal = 0;
+
   if (tilakPhoto && tilakWrap) {
     const tryTilak = (i) => {
       const exts = ['jpg','jpeg','png','webp'];
@@ -424,16 +449,70 @@
     };
     tryTilak(0);
   }
-  if (tilakBtn && tilakWrap) {
-    tilakBtn.addEventListener('click', () => {
-      tilakWrap.classList.add('applied');
-      tilakMsg.classList.remove('hidden');
-      tilakMsg.classList.add('show');
-      const r = tilakWrap.getBoundingClientRect();
-      burstSparkles(r.left + r.width/2, r.top + r.height*0.2, 24);
-      tilakBtn.textContent = 'Tilak Applied ✅';
-      tilakBtn.disabled = true;
+
+  function completeTilak() {
+    if (tilakDone) return;
+    tilakDone = true;
+    tilakApplying = false;
+    if (tilakScene) { tilakScene.classList.remove('applying'); tilakScene.classList.add('applied'); }
+    if (tilakWrap) tilakWrap.classList.add('applied');
+    if (tilakProgress) tilakProgress.style.width = '100%';
+    if (tilakMsg) { tilakMsg.classList.remove('hidden'); tilakMsg.classList.add('show'); }
+    const r = (tilakWrap || tilakBtn).getBoundingClientRect();
+    burstSparkles(r.left + r.width/2, r.top + r.height*0.25, 30);
+    playChime();
+    if (tilakBtn) { tilakBtn.textContent = 'Tilak Applied with Love ✅'; tilakBtn.disabled = true; }
+  }
+
+  function startTilakApply() {
+    if (tilakDone || tilakApplying) return;
+    tilakApplying = true;
+    ensureAudioCtx();
+    if (tilakScene) tilakScene.classList.add('applying');
+    if (tilakBtn) tilakBtn.textContent = 'Applying tilak...';
+    tilakProgressVal = 0;
+    const step = () => {
+      if (!tilakApplying || tilakDone) return;
+      tilakProgressVal += 2.5;
+      if (tilakProgress) tilakProgress.style.width = Math.min(tilakProgressVal, 100) + '%';
+      if (tilakProgressVal >= 100) { completeTilak(); }
+      else { tilakHoldTimer = requestAnimationFrame(step); }
+    };
+    tilakHoldTimer = requestAnimationFrame(step);
+  }
+  function stopTilakApply() {
+    if (tilakDone) return;
+    tilakApplying = false;
+    if (tilakScene) tilakScene.classList.remove('applying');
+    if (tilakHoldTimer) cancelAnimationFrame(tilakHoldTimer);
+    if (tilakProgressVal < 100) {
+      tilakProgressVal = 0;
+      if (tilakProgress) tilakProgress.style.width = '0%';
+      if (tilakBtn) tilakBtn.textContent = 'Apply Tilak with Love';
+    }
+  }
+
+  function playChime() {
+    if (!sfxOn) return;
+    const ctx = ensureAudioCtx(); if (!ctx) return;
+    const now = ctx.currentTime;
+    [523.25, 659.25, 783.99].forEach((f, i) => {
+      const o = ctx.createOscillator(); const g = ctx.createGain();
+      o.type = 'sine'; o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, now + i*0.05);
+      g.gain.exponentialRampToValueAtTime(0.08, now + i*0.05 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + i*0.05 + 0.5);
+      o.connect(g).connect(ctx.destination); o.start(now + i*0.05); o.stop(now + i*0.05 + 0.55);
     });
+  }
+
+  if (tilakBtn) {
+    tilakBtn.addEventListener('mousedown', startTilakApply);
+    tilakBtn.addEventListener('mouseup', stopTilakApply);
+    tilakBtn.addEventListener('mouseleave', stopTilakApply);
+    tilakBtn.addEventListener('touchstart', (e) => { e.preventDefault(); startTilakApply(); }, { passive: false });
+    tilakBtn.addEventListener('touchend', stopTilakApply);
+    tilakBtn.addEventListener('click', (e) => { e.preventDefault(); if (!tilakDone && !tilakApplying) startTilakApply(); });
   }
 
   // Extra confetti

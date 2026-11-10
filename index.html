@@ -234,16 +234,32 @@
       <section class="page" data-page="6">
         <div class="page-inner paper tilak-page">
           <h2 class="title-hand">Virtual Tilak & Blessings 🙏</h2>
-          <p class="subtitle">Tap to apply tilak and receive blessings, Pyari Velvet</p>
-          <div class="tilak-area" id="tilak-area">
-            <div class="tilak-photo-wrap" id="tilak-photo-wrap">
-              <img id="tilak-photo" class="tilak-photo hidden" alt="Photo for tilak" />
-              <div class="tilak-forehead" id="tilak-forehead">🙂</div>
-              <div class="tilak-mark" id="tilak-mark" aria-hidden="true"></div>
+          <p class="subtitle">Kaddu Bhaiya applies tilak to Pyari Velvet — tap and hold (or press) to do the tilak</p>
+          <div class="tilak-scene" id="tilak-scene">
+            <div class="tilak-character brother" aria-hidden="true">
+              <div class="char-head"></div>
+              <div class="char-body"></div>
+              <div class="char-label">Kaddu Bhaiya</div>
+              <div class="tilak-hand" id="tilak-hand">
+                <div class="thumb"></div>
+                <div class="finger"></div>
+                <div class="roli"></div>
+              </div>
             </div>
-            <button id="tilak-btn" class="btn-festive">Apply Tilak</button>
-            <div id="tilak-msg" class="reveal-msg hidden">Tilak lag gaya! Dher saara pyaar, khushiyaan aur blessings for you, Pyari Velvet. 🪔</div>
+            <div class="tilak-target" id="tilak-target">
+              <div class="tilak-photo-wrap" id="tilak-photo-wrap">
+                <img id="tilak-photo" class="tilak-photo hidden" alt="Photo for tilak" />
+                <div class="tilak-forehead" id="tilak-forehead">🙂<small>Pyari Velvet</small></div>
+                <div class="tilak-mark" id="tilak-mark" aria-hidden="true"></div>
+                <div class="tilak-glow-ring" aria-hidden="true"></div>
+              </div>
+            </div>
           </div>
+          <div class="tilak-actions">
+            <button id="tilak-btn" class="btn-festive">Apply Tilak with Love</button>
+            <div class="tilak-progress"><div id="tilak-progress-bar"></div></div>
+          </div>
+          <div id="tilak-msg" class="reveal-msg hidden">Tilak lag gaya! Dher saara pyaar, khushiyaan aur blessings for you, Pyari Velvet. 🪔💛</div>
         </div>
       </section>
 
