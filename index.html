@@ -6,7 +6,7 @@
   <title>Happy Bhai Dooj, Pyari Behen Velvet!</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Poppins:wght@400;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Poppins:wght@400;600;700&family=Caveat:wght@600;700&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -24,12 +24,12 @@
     <div class="envelope-scene">
       <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Tap to open envelope">
         <div class="env-back"></div>
-        <div class="env-letter-peek"></div>
+        <div class="env-letter-peek"><span class="env-to">For Pyari Velvet</span><span class="env-from">— Kaddu Bhaiya</span></div>
         <div class="env-front"></div>
-        <div class="env-flap"></div>
-        <div class="env-seal">💛</div>
+        <div class="env-flap"><span class="env-flap-text">A special Bhai Dooj surprise</span></div>
+        <div class="env-seal">V</div>
       </div>
-      <p class="hint pulse">Tap to open, Pyari Behen Velvet</p>
+      <p class="hint pulse">Tap to open, Pyari Velvet 💌</p>
     </div>
   </section>
 
@@ -117,6 +117,7 @@
             <button class="diya" data-lit="false" aria-label="Light diya"><span class="flame"></span><span class="bowl"></span></button>
           </div>
           <p id="diya-msg" class="reveal-msg hidden">Sab roshan ho gaya! Just like you light up my days, Pyari Velvet ✨</p>
+          <p id="diya-secret" class="reveal-msg hidden secret-msg">🎉 Secret unlocked! Kaddu Bhaiya ka ek extra surprise: Aap hamesha mere liye sabse special ho, Pyari Velvet! 💛</p>
         </div>
       </section>
 
@@ -236,14 +237,18 @@
           <h2 class="title-hand">Virtual Tilak & Blessings 🙏</h2>
           <p class="subtitle">Kaddu Bhaiya applies tilak to Pyari Velvet — tap and hold (or press) to do the tilak</p>
           <div class="tilak-scene" id="tilak-scene">
-            <div class="tilak-character brother" aria-hidden="true">
-              <div class="char-head"></div>
-              <div class="char-body"></div>
+            <div class="tilak-character brother" id="brother-char" aria-hidden="true">
+              <img id="bhaiya-photo" class="bhaiya-photo hidden" alt="Kaddu Bhaiya" />
+              <div class="char-avatar" id="char-avatar">
+                <div class="char-head"></div>
+                <div class="char-body"></div>
+              </div>
               <div class="char-label">Kaddu Bhaiya</div>
-              <div class="tilak-hand" id="tilak-hand">
+              <div class="tilak-hand" id="tilak-hand" title="Drag hand to apply tilak">
                 <div class="thumb"></div>
                 <div class="finger"></div>
                 <div class="roli"></div>
+                <span class="hand-hint">drag me</span>
               </div>
             </div>
             <div class="tilak-target" id="tilak-target">
@@ -256,7 +261,7 @@
             </div>
           </div>
           <div class="tilak-actions">
-            <button id="tilak-btn" class="btn-festive">Apply Tilak with Love</button>
+            <button id="tilak-btn" class="btn-festive">Press & Hold or Drag Hand to Apply Tilak</button>
             <div class="tilak-progress"><div id="tilak-progress-bar"></div></div>
           </div>
           <div id="tilak-msg" class="reveal-msg hidden">Tilak lag gaya! Dher saara pyaar, khushiyaan aur blessings for you, Pyari Velvet. 🪔💛</div>
@@ -315,8 +320,21 @@
         </div>
       </section>
 
-      <!-- Page 11: Extra Fun & Promises -->
+      <!-- Page 11: Roll the Dice Surprise -->
       <section class="page" data-page="10">
+        <div class="page-inner paper dice-page">
+          <h2 class="title-hand">Roll the Dice of Surprises 🎲</h2>
+          <p class="subtitle">Tap to roll and get a cute surprise/challenge for Pyari Velvet!</p>
+          <div class="dice-area">
+            <div id="dice" class="dice">🎲</div>
+            <button id="roll-dice" class="btn-festive">Roll the Dice</button>
+            <div id="dice-result" class="sweet-pop hidden"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Page 12: Extra Fun & Promises -->
+      <section class="page" data-page="11">
         <div class="page-inner paper fun-page">
           <h2 class="title-hand">More Cute Surprises 🎉</h2>
           <p class="subtitle">Because one page is never enough for Pyari Velvet!</p>
@@ -330,14 +348,15 @@
         </div>
       </section>
 
-      <!-- Page 12: Closing -->
-      <section class="page" data-page="11">
-        <div class="page-inner paper closing-page">
+      <!-- Page 13: Closing -->
+      <section class="page" data-page="12">
+        <div class="page-inner paper closing-page" id="closing-page-inner">
           <h2 class="title-hand wobble-hover" id="closing-title">Made with love by Kaddu Bhaiya</h2>
           <p class="big-love">For Pyari Velvet 🌼</p>
           <p class="subtitle">Happy Bhai Dooj! Hamesha muskurati rahiye.</p>
           <p class="subtitle">Thank you for being you and making my days wonderful! 💛</p>
           <div class="sparkle-burst" id="closing-sparkles" aria-hidden="true"></div>
+          <canvas id="fireworks-canvas" class="fireworks-canvas" aria-hidden="true"></canvas>
         </div>
       </section>
     </div>

@@ -336,3 +336,53 @@ body::after { content:""; position:fixed; inset:0; pointer-events:none; backgrou
 .page-inner { position: relative; }
 @keyframes floatUpFade { 0%{opacity:1; transform:translateY(0) scale(1)} 100%{opacity:0; transform:translateY(-30px) scale(1.2)} }
 .fun-page { text-align:center; }
+
+body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; }
+.hindi, .hinglish, .flip-back, .reveal-msg, .subtitle { font-family: 'Kalam', 'Noto Sans Devanagari', cursive; }
+
+/* Envelope personalization */
+.env-letter-peek { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:10px; }
+.env-to { font-family:'Caveat','Kalam',cursive; font-size:1.6rem; color:#7a2e1b; }
+.env-from { font-family:'Kalam',cursive; font-size:1rem; color:#a04000; margin-top:4px; }
+.env-flap-text { position:absolute; bottom:18%; left:50%; transform:translateX(-50%); font-family:'Kalam',cursive; font-size:.85rem; color:#6d3b1a; white-space:nowrap; opacity:.9; }
+.env-seal { font-family:'Caveat',cursive; font-weight:700; }
+
+/* Brother photo in tilak */
+.tilak-character.brother { width: 170px; }
+.bhaiya-photo { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 4px solid #fff; box-shadow: var(--shadow); z-index:2; }
+.char-avatar { display:flex; flex-direction:column; align-items:center; }
+.tilak-character.has-photo .char-avatar { display:none; }
+.tilak-hand { cursor: grab; touch-action: none; user-select:none; }
+.tilak-hand:active { cursor: grabbing; }
+.tilak-hand.dragging { transition: none; z-index: 10; filter: drop-shadow(0 8px 12px rgba(0,0,0,.25)); }
+.hand-hint { position:absolute; bottom:-18px; left:20px; font-size:.7rem; font-family:'Kalam',cursive; color:#7a4a2a; background:#fff8e1; padding:2px 6px; border-radius:8px; border:1px dashed rgba(212,160,23,.4); animation:pulse 2s infinite; }
+.tilak-scene.applied .hand-hint, .tilak-scene.applying .hand-hint { display:none; }
+.secret-msg { margin-top:10px; background:#fff3cd; padding:10px 12px; border-radius:12px; border:2px dashed rgba(255,179,0,.5); }
+.secret-msg.show { display:block !important; animation: popIn .6s ease; }
+
+/* Dice */
+.dice-page { text-align:center; }
+.dice-area { margin-top: 10px; }
+.dice { font-size: 5rem; margin: 10px auto; width: 120px; height: 120px; display:flex; align-items:center; justify-content:center; border-radius: 24px; background: linear-gradient(145deg,#fff,#ffe082); box-shadow: var(--shadow); transition: transform .3s; }
+.dice.rolling { animation: diceRoll .8s ease-in-out infinite; }
+@keyframes diceRoll { 0%{transform:rotate(0deg) scale(1)} 25%{transform:rotate(90deg) scale(1.1)} 50%{transform:rotate(180deg) scale(1)} 75%{transform:rotate(270deg) scale(1.1)} 100%{transform:rotate(360deg) scale(1)} }
+
+/* Fireworks canvas */
+.fireworks-canvas { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index: 2; border-radius:18px; }
+.closing-page { position: relative; overflow:hidden; }
+.closing-page > *:not(canvas) { position: relative; z-index: 3; }
+
+/* Cursor trail */
+.cursor-spark { position: fixed; width: 8px; height: 8px; border-radius: 50%; pointer-events: none; z-index: 9998; background: radial-gradient(circle,#fff7a1,#ff9800); animation: trailFade .7s ease-out forwards; }
+@keyframes trailFade { 0%{opacity:1; transform:scale(1)} 100%{opacity:0; transform:scale(0) translateY(10px)} }
+
+/* Polish */
+.page { transition: transform .75s cubic-bezier(.22,.8,.24,1), opacity .55s ease; }
+.btn-festive:active { transform: scale(.97); }
+.tilak-forehead small { display:block; }
+@media (max-width: 700px) {
+  .tilak-scene { flex-direction: column-reverse; gap: 6px; min-height: auto; }
+  .tilak-character.brother { height: 220px; }
+  .tilak-hand { right: 10px; top: 90px; }
+  .tilak-scene.applying .tilak-hand { transform: rotate(-20deg) translateX(30px) translateY(-60px); }
+}

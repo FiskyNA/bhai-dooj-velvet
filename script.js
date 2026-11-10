@@ -54,9 +54,9 @@
       else p.classList.add('next');
     });
     dotsWrap.querySelectorAll('button').forEach((b, i) => b.classList.toggle('active', i === current));
-    // closing sparkles
+    // closing fireworks finale
     if (current === pages.length - 1) {
-      setTimeout(() => burstSparkles(window.innerWidth / 2, window.innerHeight * 0.45, 20), 400);
+      setTimeout(() => { launchFireworks(); burstSparkles(window.innerWidth / 2, window.innerHeight * 0.45, 30); }, 350);
     }
   }
 
@@ -174,10 +174,12 @@
     if (glow) glow.style.opacity = '1';
   });
 
-  // Diyas
+  // Diyas + secret (tap any diya 5 times to unlock)
   const diyas = Array.from(document.querySelectorAll('.diya'));
   const roomGlow = document.getElementById('room-glow');
   const diyaMsg = document.getElementById('diya-msg');
+  const diyaSecret = document.getElementById('diya-secret');
+  let secretUnlocked = false;
   function updateRoomGlow() {
     const lit = diyas.filter(d => d.classList.contains('lit')).length;
     roomGlow.className = 'room-glow lit-' + lit;
@@ -187,14 +189,28 @@
       burstSparkles(window.innerWidth / 2, window.innerHeight / 2, 22);
     }
   }
-  diyas.forEach(d => d.addEventListener('click', () => {
-    if (d.classList.contains('lit')) return;
-    d.classList.add('lit');
-    d.setAttribute('data-lit', 'true');
-    const r = d.getBoundingClientRect();
-    burstSparkles(r.left + r.width / 2, r.top, 10);
-    updateRoomGlow();
-  }));
+  diyas.forEach(d => {
+    d._taps = 0;
+    d.addEventListener('click', () => {
+      d._taps++;
+      const r = d.getBoundingClientRect();
+      if (!d.classList.contains('lit')) {
+        d.classList.add('lit');
+        d.setAttribute('data-lit', 'true');
+        burstSparkles(r.left + r.width / 2, r.top, 10);
+        updateRoomGlow();
+      } else {
+        burstSparkles(r.left + r.width / 2, r.top, 6);
+      }
+      if (!secretUnlocked && d._taps >= 5 && diyaSecret) {
+        secretUnlocked = true;
+        diyaSecret.classList.remove('hidden');
+        diyaSecret.classList.add('show');
+        burstSparkles(r.left + r.width / 2, r.top, 30);
+        burstSparkles(window.innerWidth / 2, window.innerHeight / 2, 20);
+      }
+    });
+  });
 
   // Flip cards
   document.querySelectorAll('.flip-card').forEach(card => {
@@ -484,43 +500,60 @@
     });
   }
 
-  // Virtual tilak - animated hand applies tilak (supports optional photo: assets/photos/tilak.jpg|png|jpeg|webp)
+  // Virtual tilak - animated hand applies tilak (drag hand or press & hold)
+  // Supports photos: assets/photos/tilak.jpg|png|jpeg|webp and assets/photos/bhaiya.jpg|png|jpeg|webp
   const tilakBtn = document.getElementById('tilak-btn');
   const tilakWrap = document.getElementById('tilak-photo-wrap');
   const tilakPhoto = document.getElementById('tilak-photo');
   const tilakMsg = document.getElementById('tilak-msg');
   const tilakScene = document.getElementById('tilak-scene');
   const tilakProgress = document.getElementById('tilak-progress-bar');
+  const tilakHand = document.getElementById('tilak-hand');
+  const brotherChar = document.getElementById('brother-char');
+  const bhaiyaPhoto = document.getElementById('bhaiya-photo');
   let tilakApplying = false;
   let tilakDone = false;
   let tilakHoldTimer = null;
   let tilakProgressVal = 0;
+  let draggingHand = false;
+  let handStart = null;
 
-  if (tilakPhoto && tilakWrap) {
-    const tryTilak = (i) => {
-      const exts = ['jpg','jpeg','png','webp'];
+  function tryLoadPhoto(imgEl, wrapEl, base, onHas) {
+    if (!imgEl) return;
+    const exts = ['jpg','jpeg','png','webp'];
+    const attempt = (i) => {
       if (i >= exts.length) return;
-      const src = `assets/photos/tilak.${exts[i]}`;
-      const img = new Image();
-      img.onload = () => { tilakPhoto.src = src; tilakPhoto.classList.remove('hidden'); tilakWrap.classList.add('has-photo'); };
-      img.onerror = () => tryTilak(i + 1);
-      img.src = src;
+      const src = `assets/photos/${base}.${exts[i]}`;
+      const probe = new Image();
+      probe.onload = () => { imgEl.src = src; imgEl.classList.remove('hidden'); if (wrapEl) wrapEl.classList.add('has-photo'); if (onHas) onHas(); };
+      probe.onerror = () => attempt(i + 1);
+      probe.src = src;
     };
-    tryTilak(0);
+    attempt(0);
   }
+  tryLoadPhoto(tilakPhoto, tilakWrap, 'tilak');
+  tryLoadPhoto(bhaiyaPhoto, brotherChar, 'bhaiya');
 
   function completeTilak() {
     if (tilakDone) return;
     tilakDone = true;
     tilakApplying = false;
+    draggingHand = false;
+    if (tilakHand) { tilakHand.classList.remove('dragging'); tilakHand.style.transform = ''; tilakHand.style.left = ''; tilakHand.style.top = ''; }
     if (tilakScene) { tilakScene.classList.remove('applying'); tilakScene.classList.add('applied'); }
     if (tilakWrap) tilakWrap.classList.add('applied');
     if (tilakProgress) tilakProgress.style.width = '100%';
     if (tilakMsg) { tilakMsg.classList.remove('hidden'); tilakMsg.classList.add('show'); }
     const r = (tilakWrap || tilakBtn).getBoundingClientRect();
-    burstSparkles(r.left + r.width/2, r.top + r.height*0.25, 30);
+    burstSparkles(r.left + r.width/2, r.top + r.height*0.25, 40);
     playChime();
     if (tilakBtn) { tilakBtn.textContent = 'Tilak Applied with Love ✅'; tilakBtn.disabled = true; }
+  }
+
+  function setTilakProgress(val) {
+    tilakProgressVal = Math.max(0, Math.min(100, val));
+    if (tilakProgress) tilakProgress.style.width = tilakProgressVal + '%';
+    if (tilakProgressVal >= 100) completeTilak();
   }
 
   function startTilakApply() {
@@ -529,25 +562,23 @@
     ensureAudioCtx();
     if (tilakScene) tilakScene.classList.add('applying');
     if (tilakBtn) tilakBtn.textContent = 'Applying tilak...';
-    tilakProgressVal = 0;
+    if (tilakHoldTimer) cancelAnimationFrame(tilakHoldTimer);
     const step = () => {
-      if (!tilakApplying || tilakDone) return;
-      tilakProgressVal += 2.5;
-      if (tilakProgress) tilakProgress.style.width = Math.min(tilakProgressVal, 100) + '%';
-      if (tilakProgressVal >= 100) { completeTilak(); }
-      else { tilakHoldTimer = requestAnimationFrame(step); }
+      if (!tilakApplying || tilakDone || draggingHand) return;
+      setTilakProgress(tilakProgressVal + 2.2);
+      if (!tilakDone) tilakHoldTimer = requestAnimationFrame(step);
     };
     tilakHoldTimer = requestAnimationFrame(step);
   }
   function stopTilakApply() {
     if (tilakDone) return;
+    if (draggingHand) return;
     tilakApplying = false;
     if (tilakScene) tilakScene.classList.remove('applying');
     if (tilakHoldTimer) cancelAnimationFrame(tilakHoldTimer);
     if (tilakProgressVal < 100) {
-      tilakProgressVal = 0;
-      if (tilakProgress) tilakProgress.style.width = '0%';
-      if (tilakBtn) tilakBtn.textContent = 'Apply Tilak with Love';
+      setTilakProgress(0);
+      if (tilakBtn) tilakBtn.textContent = 'Press & Hold or Drag Hand to Apply Tilak';
     }
   }
 
@@ -555,23 +586,63 @@
     if (!sfxOn) return;
     const ctx = ensureAudioCtx(); if (!ctx) return;
     const now = ctx.currentTime;
-    [523.25, 659.25, 783.99].forEach((f, i) => {
+    [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
       const o = ctx.createOscillator(); const g = ctx.createGain();
       o.type = 'sine'; o.frequency.value = f;
-      g.gain.setValueAtTime(0.0001, now + i*0.05);
-      g.gain.exponentialRampToValueAtTime(0.08, now + i*0.05 + 0.02);
-      g.gain.exponentialRampToValueAtTime(0.0001, now + i*0.05 + 0.5);
-      o.connect(g).connect(ctx.destination); o.start(now + i*0.05); o.stop(now + i*0.05 + 0.55);
+      g.gain.setValueAtTime(0.0001, now + i*0.06);
+      g.gain.exponentialRampToValueAtTime(0.07, now + i*0.06 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + i*0.06 + 0.5);
+      o.connect(g).connect(ctx.destination); o.start(now + i*0.06); o.stop(now + i*0.06 + 0.55);
     });
   }
 
   if (tilakBtn) {
-    tilakBtn.addEventListener('mousedown', startTilakApply);
+    tilakBtn.addEventListener('mousedown', (e) => { if (e.button===0) startTilakApply(); });
     tilakBtn.addEventListener('mouseup', stopTilakApply);
     tilakBtn.addEventListener('mouseleave', stopTilakApply);
     tilakBtn.addEventListener('touchstart', (e) => { e.preventDefault(); startTilakApply(); }, { passive: false });
     tilakBtn.addEventListener('touchend', stopTilakApply);
-    tilakBtn.addEventListener('click', (e) => { e.preventDefault(); if (!tilakDone && !tilakApplying) startTilakApply(); });
+  }
+
+  // Drag hand to apply tilak
+  if (tilakHand && tilakScene) {
+    const onPointerDown = (e) => {
+      if (tilakDone) return;
+      draggingHand = true; tilakApplying = true; ensureAudioCtx();
+      tilakHand.classList.add('dragging');
+      tilakScene.classList.add('applying');
+      if (tilakBtn) tilakBtn.textContent = 'Applying tilak...';
+      handStart = { x: e.clientX, y: e.clientY, t: Date.now() };
+      tilakHand.setPointerCapture(e.pointerId);
+    };
+    const onPointerMove = (e) => {
+      if (!draggingHand || tilakDone) return;
+      const dx = e.clientX - handStart.x;
+      const dy = e.clientY - handStart.y;
+      // move hand toward target (clamped)
+      const mx = Math.max(-20, Math.min(160, dx));
+      const my = Math.max(-80, Math.min(40, dy));
+      tilakHand.style.transform = `rotate(${-20 + mx*0.05}deg) translateX(${80 + mx}px) translateY(${-20 + my}px)`;
+      // progress based on how far dragged toward target
+      const prog = Math.min(100, Math.max(0, (mx + 20) / 140 * 70 + Math.max(0, -my) / 60 * 30));
+      setTilakProgress(Math.max(tilakProgressVal, prog));
+      if (prog > 92) completeTilak();
+    };
+    const onPointerUp = (e) => {
+      if (!draggingHand) return;
+      draggingHand = false;
+      tilakHand.classList.remove('dragging');
+      if (!tilakDone) {
+        tilakHand.style.transform = '';
+        tilakApplying = false;
+        tilakScene.classList.remove('applying');
+        if (tilakProgressVal < 100) { setTilakProgress(0); if (tilakBtn) tilakBtn.textContent = 'Press & Hold or Drag Hand to Apply Tilak'; }
+      }
+      try { tilakHand.releasePointerCapture(e.pointerId); } catch(_) {}
+    };
+    tilakHand.addEventListener('pointerdown', onPointerDown);
+    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointerup', onPointerUp);
   }
 
   // Extra confetti
@@ -581,4 +652,99 @@
       for (let i=0;i<5;i++) setTimeout(() => burstSparkles(Math.random()*window.innerWidth, Math.random()*window.innerHeight*0.7, 18), i*120);
     });
   }
+
+  // Dice surprise
+  const dice = document.getElementById('dice');
+  const rollDiceBtn = document.getElementById('roll-dice');
+  const diceResult = document.getElementById('dice-result');
+  const diceFaces = ['⚀','⚁','⚂','⚃','⚄','⚅'];
+  const diceSurprises = [
+    "Aapko ek badi si smile aur ek virtual hug! 🤗",
+    "Surprise: Aap aaj ki sabse cute insaan hain! 💛",
+    "Kaddu Bhaiya ki taraf se ek extra mithai wish! 🍬",
+    "Aaj ka din aur bhi wonderful ho — yahi dua hai! ✨",
+    "Secret compliment: Aapki presence hi special hai! 🌟",
+    "Jackpot! Unlimited blessings aur khushiyaan for Pyari Velvet! 🎉"
+  ];
+  if (rollDiceBtn && dice && diceResult) {
+    rollDiceBtn.addEventListener('click', () => {
+      rollDiceBtn.disabled = true;
+      dice.classList.add('rolling');
+      let ticks = 0;
+      const t = setInterval(() => {
+        const r = Math.floor(Math.random()*6);
+        dice.textContent = diceFaces[r];
+        ticks++;
+        if (ticks > 12) {
+          clearInterval(t);
+          dice.classList.remove('rolling');
+          const final = Math.floor(Math.random()*6);
+          dice.textContent = diceFaces[final];
+          diceResult.textContent = diceSurprises[final];
+          diceResult.classList.remove('hidden');
+          diceResult.classList.add('show');
+          burstSparkles(window.innerWidth/2, window.innerHeight/2, 24);
+          rollDiceBtn.disabled = false;
+        }
+      }, 90);
+    });
+  }
+
+  // Fireworks finale on closing page
+  const fwCanvas = document.getElementById('fireworks-canvas');
+  let fwCtx, fwParticles = [], fwRunning = false, fwAnim;
+  function resizeFw() {
+    if (!fwCanvas) return;
+    const rect = fwCanvas.parentElement.getBoundingClientRect();
+    fwCanvas.width = rect.width; fwCanvas.height = rect.height;
+  }
+  function spawnFirework() {
+    if (!fwCanvas) return;
+    const x = Math.random()*fwCanvas.width*0.8 + fwCanvas.width*0.1;
+    const y = Math.random()*fwCanvas.height*0.4 + fwCanvas.height*0.1;
+    const colors = ['#ff5252','#ffd740','#69f0ae','#40c4ff','#ff4081','#fff'];
+    const color = colors[Math.floor(Math.random()*colors.length)];
+    for (let i=0;i<36;i++) {
+      const a = (Math.PI*2*i)/36;
+      const s = Math.random()*3 + 1.5;
+      fwParticles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:60+Math.random()*20,color});
+    }
+  }
+  function drawFw() {
+    if (!fwCtx) return;
+    fwCtx.clearRect(0,0,fwCanvas.width,fwCanvas.height);
+    fwParticles.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.vy += 0.03; p.life -= 1;
+      fwCtx.globalAlpha = Math.max(0, p.life/80);
+      fwCtx.fillStyle = p.color;
+      fwCtx.beginPath(); fwCtx.arc(p.x,p.y,2.2,0,Math.PI*2); fwCtx.fill();
+    });
+    fwParticles = fwParticles.filter(p => p.life>0);
+    if (fwRunning || fwParticles.length) fwAnim = requestAnimationFrame(drawFw);
+  }
+  function launchFireworks() {
+    if (!fwCanvas) return;
+    fwCtx = fwCanvas.getContext('2d');
+    resizeFw();
+    fwRunning = true;
+    let bursts = 0;
+    const interval = setInterval(() => { spawnFirework(); bursts++; if (bursts>6) { clearInterval(interval); fwRunning=false; } }, 450);
+    if (!fwAnim) drawFw();
+  }
+  window.addEventListener('resize', () => { if (fwCanvas) resizeFw(); });
+
+  // Cursor sparkle trail
+  let lastTrail = 0;
+  document.addEventListener('mousemove', (e) => {
+    const now = Date.now();
+    if (now - lastTrail < 35) return;
+    lastTrail = now;
+    const s = document.createElement('span');
+    s.className = 'cursor-spark';
+    s.style.left = e.clientX + 'px'; s.style.top = e.clientY + 'px';
+    const colors = ['#fff7a1','#ff9800','#ff80ab','#ffd54f'];
+    s.style.background = `radial-gradient(circle, ${colors[Math.floor(Math.random()*colors.length)]}, #ff9800)`;
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 700);
+  });
 })();
