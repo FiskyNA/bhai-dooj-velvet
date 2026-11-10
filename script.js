@@ -375,4 +375,60 @@
       burstSparkles(r.left + 30 + Math.random()*(r.width-60), r.top + 20 + Math.random()*60, 3);
     }, 2200);
   }
+
+  // Wish spinner
+  const spinBtn = document.getElementById('spin-wish');
+  const wishWheel = document.getElementById('wish-wheel');
+  const wishResult = document.getElementById('wish-result');
+  const wishes = [
+    "You make days brighter, Pyari Velvet! ✨",
+    "Aapki vibes sabse cutest hain! 💛",
+    "Kaddu Bhaiya is always proud of you 🌼",
+    "Unlimited smiles aur khushiyaan for you 😊",
+    "Aapke saath yeh bond bohot special hai 💫",
+    "Aapka Kaddu Bhaiya hamesha aapke saath hai 🤝"
+  ];
+  let wishRot = 0;
+  if (spinBtn && wishWheel) {
+    spinBtn.addEventListener('click', () => {
+      const pick = Math.floor(Math.random() * wishes.length);
+      const extra = 360 * (3 + Math.floor(Math.random()*2));
+      const seg = 360 / wishes.length;
+      wishRot += extra + (360 - (pick * seg) - seg/2) - (wishRot % 360);
+      wishWheel.style.transform = `rotate(${wishRot}deg)`;
+      spinBtn.disabled = true;
+      setTimeout(() => {
+        wishResult.textContent = wishes[pick];
+        wishResult.classList.remove('hidden');
+        wishResult.classList.add('show');
+        burstSparkles(window.innerWidth/2, window.innerHeight/2, 28);
+        spinBtn.disabled = false;
+      }, 2600);
+    });
+  }
+
+  // Virtual tilak
+  const tilakBtn = document.getElementById('tilak-btn');
+  const tilakForehead = document.getElementById('tilak-forehead');
+  const tilakMsg = document.getElementById('tilak-msg');
+  if (tilakBtn && tilakForehead) {
+    tilakBtn.addEventListener('click', () => {
+      tilakForehead.classList.add('tilak-applied');
+      tilakForehead.textContent = '🙂';
+      tilakMsg.classList.remove('hidden');
+      tilakMsg.classList.add('show');
+      const r = tilakForehead.getBoundingClientRect();
+      burstSparkles(r.left + r.width/2, r.top, 24);
+      tilakBtn.textContent = 'Tilak Applied ✅';
+      tilakBtn.disabled = true;
+    });
+  }
+
+  // Extra confetti
+  const confettiBtn = document.getElementById('confetti-btn');
+  if (confettiBtn) {
+    confettiBtn.addEventListener('click', () => {
+      for (let i=0;i<5;i++) setTimeout(() => burstSparkles(Math.random()*window.innerWidth, Math.random()*window.innerHeight*0.7, 18), i*120);
+    });
+  }
 })();
