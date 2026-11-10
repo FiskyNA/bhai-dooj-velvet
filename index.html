@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Bhai Dooj, Pyari Behen Velvet!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Poppins:wght@400;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Preloader -->
+  <div id="preloader" class="preloader" aria-label="Loading">
+    <div class="morph-wrap">
+      <div id="morph-shape" class="morph-shape heart"></div>
+    </div>
+    <p class="preloader-text">For Velvet…</p>
+  </div>
+
+  <!-- Envelope Stage -->
+  <section id="stage-envelope" class="stage active" aria-label="Envelope">
+    <div class="fairy-string top" aria-hidden="true"></div>
+    <div class="envelope-scene">
+      <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Tap to open envelope">
+        <div class="env-back"></div>
+        <div class="env-letter-peek"></div>
+        <div class="env-front"></div>
+        <div class="env-flap"></div>
+        <div class="env-seal">💛</div>
+      </div>
+      <p class="hint pulse">Tap to open, Pyari Behen Velvet</p>
+    </div>
+  </section>
+
+  <!-- Journey Stage (page turns) -->
+  <main id="journey" class="journey hidden" aria-live="polite">
+    <div class="fairy-string top fixed" aria-hidden="true"></div>
+    <div id="sparkle-layer" class="sparkle-layer" aria-hidden="true"></div>
+
+    <div class="book" id="book">
+      <!-- Page 1: Cover / 3D Scene -->
+      <section class="page current" data-page="0">
+        <div class="page-inner cover-page paper">
+          <div class="lanterns" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+          <h1 class="title-hand">Happy Bhai Dooj,<br><span class="highlight">Pyari Behen Velvet!</span></h1>
+          <p class="subtitle">From Aapka Kaddu Bhaiya, with all the love ✨</p>
+          <div class="scene-wrap" id="scene-wrap">
+            <div class="scene-layer sky"></div>
+            <img src="assets/hero-scene.png" alt="Kaddu Bhaiya in kurta holding sweets and Velvet in kurti entering a warm lit house together" class="scene-img" id="scene-img" onerror="this.style.display='none';document.getElementById('scene-fallback').style.display='flex'"/>
+            <div class="scene-fallback" id="scene-fallback" style="display:none">
+              <svg viewBox="0 0 600 340" class="fallback-svg" role="img" aria-label="Kaddu Bhaiya and Velvet entering home together">
+                <defs>
+                  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a237e"/><stop offset="100%" stop-color="#4e342e"/></linearGradient>
+                  <linearGradient id="glow" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffe082"/><stop offset="100%" stop-color="#ff9800"/></linearGradient>
+                </defs>
+                <rect width="600" height="340" fill="url(#sky)"/>
+                <circle cx="480" cy="60" r="28" fill="#fff9c4" opacity="0.9"/>
+                <rect x="360" y="120" width="170" height="150" rx="8" fill="#5d4037"/>
+                <rect x="420" y="180" width="55" height="90" rx="4" fill="url(#glow)"/>
+                <polygon points="445,70 340,130 550,130" fill="#6d4c41"/>
+                <rect x="60" y="250" width="480" height="90" fill="#3e2723"/>
+                <g opacity="0.9">
+                  <ellipse cx="150" cy="260" rx="10" ry="4" fill="#ff9800"/>
+                  <ellipse cx="200" cy="265" rx="10" ry="4" fill="#ff9800"/>
+                  <ellipse cx="250" cy="260" rx="10" ry="4" fill="#ff9800"/>
+                  <ellipse cx="300" cy="265" rx="10" ry="4" fill="#ff9800"/>
+                </g>
+                <!-- Brother -->
+                <g transform="translate(285,210)">
+                  <circle cx="0" cy="-40" r="16" fill="#8d5524"/>
+                  <rect x="-14" y="-25" width="28" height="55" rx="8" fill="#f5f0e6"/>
+                  <rect x="-12" y="-10" width="24" height="12" rx="4" fill="#d4a017" opacity="0.8"/>
+                  <rect x="10" y="-5" width="18" height="14" rx="3" fill="#ff7043"/>
+                  <circle cx="19" cy="2" r="4" fill="#ffd54f"/><circle cx="19" cy="-4" r="4" fill="#ffcc80"/>
+                </g>
+                <!-- Sister -->
+                <g transform="translate(330,215)">
+                  <circle cx="0" cy="-38" r="14" fill="#8d5524"/>
+                  <path d="M-18,-22 L18,-22 L22,30 L-22,30 Z" fill="#ffb300"/>
+                  <rect x="-14" y="-8" width="28" height="10" rx="4" fill="#d94b3d" opacity="0.8"/>
+                </g>
+                <text x="300" y="320" text-anchor="middle" fill="#ffe082" font-family="Kalam, cursive" font-size="22">Kaddu Bhaiya &amp; Pyari Behen Velvet entering home together</text>
+              </svg>
+            </div>
+            <div class="scene-glow" aria-hidden="true"></div>
+          </div>
+          <button id="phuljhadi-btn" class="btn-festive">Light the phuljhadi 🎆</button>
+          <p class="scroll-hint">Scroll / swipe to turn the page ➜</p>
+        </div>
+      </section>
+
+      <!-- Page 2: Light the Diyas -->
+      <section class="page" data-page="1">
+        <div class="page-inner paper diya-room">
+          <h2 class="title-hand">Step inside & light the diyas 🪔</h2>
+          <p class="subtitle">Tap each diya to fill the room with warmth</p>
+          <div class="room-glow" id="room-glow"></div>
+          <div class="diyas-row" id="diyas-row">
+            <button class="diya" data-lit="false" aria-label="Light diya"><span class="flame"></span><span class="bowl"></span></button>
+            <button class="diya" data-lit="false" aria-label="Light diya"><span class="flame"></span><span class="bowl"></span></button>
+            <button class="diya" data-lit="false" aria-label="Light diya"><span class="flame"></span><span class="bowl"></span></button>
+            <button class="diya" data-lit="false" aria-label="Light diya"><span class="flame"></span><span class="bowl"></span></button>
+            <button class="diya" data-lit="false" aria-label="Light diya"><span class="flame"></span><span class="bowl"></span></button>
+          </div>
+          <p id="diya-msg" class="reveal-msg hidden">Sab roshan ho gaya! Just like you light up my life, pyari choti behen ✨</p>
+        </div>
+      </section>
+
+      <!-- Page 3: Message (tap to reveal flip tags) -->
+      <section class="page" data-page="2">
+        <div class="page-inner paper message-page">
+          <h2 class="title-hand">Kuch baatein dil se… 💌</h2>
+          <p class="subtitle">Tap each card to reveal</p>
+          <div class="flip-grid">
+            <div class="flip-card" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">Tap to reveal 🤫<br><small>Thing 1</small></div>
+                <div class="flip-back">Aap meri choti si princess hain, aur hamesha rahengi — no matter how big you grow!</div>
+              </div>
+            </div>
+            <div class="flip-card" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">Tap to reveal 🤫<br><small>Thing 2</small></div>
+                <div class="flip-back">Aapki hasi = mera sabse favourite vibe. Yeh smile hamesha bani rahe!</div>
+              </div>
+            </div>
+            <div class="flip-card" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">Tap to reveal 🤫<br><small>Thing 3</small></div>
+                <div class="flip-back">Chahe kuch bhi ho, aapka Kaddu Bhaiya hamesha aapke saath hai. Pakka promise.</div>
+              </div>
+            </div>
+            <div class="flip-card main-card" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front main-front">A special note for my Pyari Behen Velvet 💛<br><small>Tap to open</small></div>
+                <div class="flip-back main-back">
+                  <p><strong>Happy Bhai Dooj, meri pyari choti behen Velvet!</strong></p>
+                  <p>Is khaas din par bas yahi dua hai ki aapki zindagi hamesha khushiyon, pyaar aur success se bhari rahe. Aapka saath mere liye sabse special gift hai.</p>
+                  <p>Thank you for being <em>you</em> — cute, caring, and absolutely irreplaceable. Love you always!</p>
+                  <p class="sign">— Aapka Kaddu Bhaiya</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Page 4: Sweet Surprise -->
+      <section class="page" data-page="3">
+        <div class="page-inner paper sweets-page">
+          <h2 class="title-hand">Mithai time! 🍬</h2>
+          <p class="subtitle">Pick a sweet for a little surprise</p>
+          <div class="sweets-box">
+            <button class="sweet" data-msg="You’re the sweetest, meri pyari choti behen!">🍡<span>Ladoo</span></button>
+            <button class="sweet" data-msg="Aapki smile sabse pyaari mithai hai!">🧡<span>Barfi</span></button>
+            <button class="sweet" data-msg="Aap hamesha khush rahiye, Velvet!">🍬<span>Kaju Katli</span></button>
+            <button class="sweet" data-msg="Proud of you, always & forever!">🥮<span>Peda</span></button>
+          </div>
+          <div id="sweet-msg" class="sweet-pop hidden"></div>
+        </div>
+      </section>
+
+      <!-- Page 5: Moments Wheel -->
+      <section class="page" data-page="4">
+        <div class="page-inner paper wheel-page">
+          <h2 class="title-hand">Our Moments 🎡</h2>
+          <p class="subtitle">Spin the wheel of memories (more coming soon!)</p>
+          <div class="wheel-stage">
+            <button class="wheel-nav" id="wheel-prev" aria-label="Previous">‹</button>
+            <div class="wheel" id="wheel">
+              <div class="polaroid" style="--i:0"><div class="polaroid-inner">🪔<p>Bhai Dooj vibes</p></div></div>
+              <div class="polaroid" style="--i:1"><div class="polaroid-inner">🏠<p>Entering home together</p></div></div>
+              <div class="polaroid" style="--i:2"><div class="polaroid-inner">🍬<p>Sweets & smiles</p></div></div>
+              <div class="polaroid" style="--i:3"><div class="polaroid-inner">✨<p>Festive lights</p></div></div>
+              <div class="polaroid" style="--i:4"><div class="polaroid-inner">💛<p>Always together</p></div></div>
+              <div class="polaroid" style="--i:5"><div class="polaroid-inner">📷<p>Memory coming soon</p></div></div>
+            </div>
+            <button class="wheel-nav" id="wheel-next" aria-label="Next">›</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Page 6: Gallery -->
+      <section class="page" data-page="5">
+        <div class="page-inner paper gallery-page">
+          <h2 class="title-hand">Photo Gallery 📸</h2>
+          <p class="subtitle">Frames ready — photos will be added soon!</p>
+          <div class="gallery-grid" id="gallery-grid">
+            <div class="photo-frame placeholder"><span>Photo 1<br><small>coming soon</small></span></div>
+            <div class="photo-frame placeholder"><span>Photo 2<br><small>coming soon</small></span></div>
+            <div class="photo-frame placeholder"><span>Photo 3<br><small>coming soon</small></span></div>
+            <div class="photo-frame placeholder"><span>Photo 4<br><small>coming soon</small></span></div>
+          </div>
+          <p class="hint-small">Tip: add photos later in <code>assets/photos/</code> and update the gallery in <code>index.html</code>.</p>
+        </div>
+      </section>
+
+      <!-- Page 7: Blessings -->
+      <section class="page" data-page="6">
+        <div class="page-inner paper blessings-page">
+          <h2 class="title-hand">Bhai Dooj ki Shubhkaamnayein 🙏</h2>
+          <div class="blessing-card">
+            <div class="tilak" aria-hidden="true">🪔</div>
+            <p>Is Bhai Dooj par, yeh rishta aur bhi gehra ho — pyaar, hansi, aur dher saari mithaas ke saath.</p>
+            <p>May your path always be lit with joy, success, and endless blessings, meri pyari choti behen Velvet.</p>
+            <p class="hinglish">Aapka bhai hamesha aapke saath hai — aaj bhi, kal bhi, hamesha. 💛</p>
+          </div>
+          <div class="floating-diyas" aria-hidden="true"><span>🪔</span><span>🪔</span><span>🪔</span></div>
+        </div>
+      </section>
+
+      <!-- Page 8: Closing -->
+      <section class="page" data-page="7">
+        <div class="page-inner paper closing-page">
+          <h2 class="title-hand wobble-hover" id="closing-title">Made with love by Kaddu Bhaiya</h2>
+          <p class="big-love">For my Pyari Behen Velvet 🌼</p>
+          <p class="subtitle">Happy Bhai Dooj! Hamesha muskurati rahiye.</p>
+          <div class="sparkle-burst" id="closing-sparkles" aria-hidden="true"></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Page dots -->
+    <nav class="page-dots" id="page-dots" aria-label="Pages"></nav>
+
+    <!-- Music Player -->
+    <div class="music-player" id="music-player">
+      <button id="music-toggle" class="music-btn" aria-label="Play music">▶</button>
+      <div class="music-info">
+        <span id="music-title">Add your songs in assets/music</span>
+        <div class="eq hidden" id="eq"><span></span><span></span><span></span></div>
+      </div>
+      <button id="music-next" class="music-btn small" aria-label="Next song">⏭</button>
+      <audio id="audio" preload="none"></audio>
+    </div>
+  </main>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox hidden" role="dialog" aria-label="Photo view">
+    <button id="lightbox-close" class="lightbox-close" aria-label="Close">✕</button>
+    <img id="lightbox-img" alt="Gallery photo" />
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
