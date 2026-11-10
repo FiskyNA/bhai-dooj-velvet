@@ -319,7 +319,8 @@
   // Music player
   const playlist = [
     { title: 'Raske Kamar', src: 'assets/music/Raske Kamar.mp3' },
-    { title: 'Cat Sahiba', src: 'assets/music/Cat Sahiba.mp4' }
+    { title: 'Cat Sahiba', src: 'assets/music/Cat Sahiba.mp4' },
+    { title: 'Special Song', src: 'assets/music/3f6e7208-8949-4379-bfd2-3fc5e94a3f41.mov' }
   ];
   let track = 0;
   let builtinPlaying = false;
