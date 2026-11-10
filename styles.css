@@ -386,3 +386,6 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; }
   .tilak-hand { right: 10px; top: 90px; }
   .tilak-scene.applying .tilak-hand { transform: rotate(-20deg) translateX(30px) translateY(-60px); }
 }
+
+.music-volume { width: 70px; accent-color: #ff8c00; cursor: pointer; }
+@media (max-width: 600px) { .music-volume { width: 54px; } }

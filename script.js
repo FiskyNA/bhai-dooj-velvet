@@ -330,6 +330,11 @@
   const nextBtn = document.getElementById('music-next');
   const titleEl = document.getElementById('music-title');
   const eq = document.getElementById('eq');
+  const volumeSlider = document.getElementById('music-volume');
+  if (audio) audio.volume = 0.8;
+  if (volumeSlider) {
+    volumeSlider.addEventListener('input', () => { if (audio) audio.volume = volumeSlider.value / 100; });
+  }
 
   function playBuiltinNote(freq, start, dur, vol=0.05) {
     const ctx = ensureAudioCtx(); if (!ctx) return;
