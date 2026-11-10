@@ -8,6 +8,8 @@
   let current = 0;
   let isAnimating = false;
   let touchStartY = 0;
+  let sfxOn = true;
+  let audioCtx = null;
 
   // Preloader: wait a bit for feel + window load
   window.addEventListener('load', () => {
@@ -58,9 +60,45 @@
     }
   }
 
+  function ensureAudioCtx() {
+    if (!audioCtx) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (AC) audioCtx = new AC();
+    }
+    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{});
+    return audioCtx;
+  }
+  function playPageTurn() {
+    if (!sfxOn) return;
+    const ctx = ensureAudioCtx();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+    // soft paper whoosh
+    const buffer = ctx.createBuffer(1, ctx.sampleRate * 0.25, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < data.length; i++) {
+      const t = i / data.length;
+      data[i] = (Math.random() * 2 - 1) * (1 - t) * 0.35;
+    }
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(900, now);
+    filter.frequency.exponentialRampToValueAtTime(2200, now + 0.18);
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(0.18, now + 0.03);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+    noise.connect(filter).connect(gain).connect(ctx.destination);
+    noise.start(now);
+    noise.stop(now + 0.25);
+  }
+
   function goTo(idx) {
     if (isAnimating || idx < 0 || idx >= pages.length || idx === current) return;
     isAnimating = true;
+    playPageTurn();
     current = idx;
     updatePages();
     setTimeout(() => { isAnimating = false; }, 850);
@@ -160,9 +198,13 @@
 
   // Flip cards
   document.querySelectorAll('.flip-card').forEach(card => {
-    const toggle = () => card.classList.toggle('flipped');
+    const toggle = (e) => {
+      card.classList.toggle('flipped');
+      const r = card.getBoundingClientRect();
+      burstSparkles(r.left + r.width/2, r.top + r.height/2, 10);
+    };
     card.addEventListener('click', toggle);
-    card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+    card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(e); } });
   });
 
   // Sweets
@@ -211,15 +253,38 @@
   window.addEventListener('resize', layoutWheel);
   layoutWheel();
 
-  // Gallery lightbox (for when real images are added)
+  // Gallery lightbox + auto-load images (1.jpg, 2.png etc. from assets/photos/)
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightbox-img');
-  document.getElementById('gallery-grid').addEventListener('click', (e) => {
-    const img = e.target.closest('.photo-frame')?.querySelector('img');
-    if (!img) return;
-    lightboxImg.src = img.src;
-    lightbox.classList.remove('hidden');
-  });
+  const galleryGrid = document.getElementById('gallery-grid');
+  if (galleryGrid) {
+    const frames = Array.from(galleryGrid.querySelectorAll('.photo-frame'));
+    frames.forEach((frame, idx) => {
+      const n = frame.getAttribute('data-slot') || (idx + 1);
+      const exts = ['jpg','jpeg','png','webp','gif'];
+      const tryLoad = (i) => {
+        if (i >= exts.length) return;
+        const img = new Image();
+        const src = `assets/photos/${n}.${exts[i]}`;
+        img.onload = () => {
+          frame.classList.remove('placeholder');
+          frame.innerHTML = '';
+          img.alt = `Photo ${n} - Velvet & Kaddu Bhaiya`;
+          img.loading = 'lazy';
+          frame.appendChild(img);
+        };
+        img.onerror = () => tryLoad(i + 1);
+        img.src = src;
+      };
+      tryLoad(0);
+    });
+    galleryGrid.addEventListener('click', (e) => {
+      const img = e.target.closest('.photo-frame')?.querySelector('img');
+      if (!img) return;
+      lightboxImg.src = img.src;
+      lightbox.classList.remove('hidden');
+    });
+  }
   document.getElementById('lightbox-close').addEventListener('click', () => lightbox.classList.add('hidden'));
   lightbox.addEventListener('click', (e) => { if (e.target === lightbox) lightbox.classList.add('hidden'); });
 
@@ -272,4 +337,42 @@
   audio.addEventListener('ended', () => { if (playlist.length) { loadTrack(track + 1); audio.play().catch(()=>{}); } });
   audio.addEventListener('play', updateMusicUI);
   audio.addEventListener('pause', updateMusicUI);
+
+  // SFX toggle (page turn sound)
+  const sfxBtn = document.getElementById('sfx-toggle');
+  if (sfxBtn) {
+    sfxBtn.addEventListener('click', () => {
+      sfxOn = !sfxOn;
+      sfxBtn.textContent = sfxOn ? '🔊' : '🔇';
+      sfxBtn.setAttribute('aria-label', sfxOn ? 'Mute page turn sound' : 'Enable page turn sound');
+      if (sfxOn) { ensureAudioCtx(); playPageTurn(); }
+    });
+  }
+  // unlock audio context on first interaction
+  ['click','touchstart','keydown'].forEach(ev => window.addEventListener(ev, () => ensureAudioCtx(), { once: true, passive: true }));
+
+  // Scene parallax & ambient sparkles
+  const sceneWrap = document.getElementById('scene-wrap');
+  if (sceneWrap) {
+    sceneWrap.addEventListener('mousemove', (e) => {
+      const r = sceneWrap.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      const img = sceneWrap.querySelector('.scene-img, .fallback-svg');
+      if (img) img.style.transform = `scale(1.04) translate(${x*-10}px, ${y*-6}px)`;
+      sceneWrap.querySelectorAll('.float-lantern, .petal, .star').forEach((el, i) => {
+        const d = (i % 3 + 1) * 6;
+        el.style.transform = `translate(${x*d}px, ${y*d}px)`;
+      });
+    });
+    sceneWrap.addEventListener('mouseleave', () => {
+      const img = sceneWrap.querySelector('.scene-img, .fallback-svg');
+      if (img) img.style.transform = '';
+    });
+    setInterval(() => {
+      if (journey.classList.contains('hidden') || current !== 0) return;
+      const r = sceneWrap.getBoundingClientRect();
+      burstSparkles(r.left + 30 + Math.random()*(r.width-60), r.top + 20 + Math.random()*60, 3);
+    }, 2200);
+  }
 })();

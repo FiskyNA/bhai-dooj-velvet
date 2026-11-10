@@ -47,43 +47,56 @@
           <p class="subtitle">From Aapka Kaddu Bhaiya, with all the love ✨</p>
           <div class="scene-wrap" id="scene-wrap">
             <div class="scene-layer sky"></div>
+            <div class="scene-parallax" aria-hidden="true">
+              <span class="float-lantern l1">🏮</span>
+              <span class="float-lantern l2">🏮</span>
+              <span class="float-lantern l3">🏮</span>
+              <span class="petal p1"></span><span class="petal p2"></span><span class="petal p3"></span><span class="petal p4"></span>
+              <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
+            </div>
             <img src="assets/hero-scene.png" alt="Kaddu Bhaiya in kurta holding sweets and Velvet in kurti entering a warm lit house together" class="scene-img" id="scene-img" onerror="this.style.display='none';document.getElementById('scene-fallback').style.display='flex'"/>
             <div class="scene-fallback" id="scene-fallback" style="display:none">
               <svg viewBox="0 0 600 340" class="fallback-svg" role="img" aria-label="Kaddu Bhaiya and Velvet entering home together">
                 <defs>
                   <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a237e"/><stop offset="100%" stop-color="#4e342e"/></linearGradient>
                   <linearGradient id="glow" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffe082"/><stop offset="100%" stop-color="#ff9800"/></linearGradient>
+                  <filter id="softglow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
                 </defs>
                 <rect width="600" height="340" fill="url(#sky)"/>
-                <circle cx="480" cy="60" r="28" fill="#fff9c4" opacity="0.9"/>
+                <g class="svg-stars"><circle cx="80" cy="40" r="2" fill="#fff"/><circle cx="140" cy="70" r="1.5" fill="#fff"/><circle cx="220" cy="30" r="2" fill="#fff"/><circle cx="300" cy="55" r="1.5" fill="#fff"/><circle cx="520" cy="40" r="2" fill="#fff"/></g>
+                <circle cx="480" cy="60" r="28" fill="#fff9c4" opacity="0.95" filter="url(#softglow)"/>
                 <rect x="360" y="120" width="170" height="150" rx="8" fill="#5d4037"/>
-                <rect x="420" y="180" width="55" height="90" rx="4" fill="url(#glow)"/>
+                <rect x="420" y="180" width="55" height="90" rx="4" fill="url(#glow)" filter="url(#softglow)" class="door-glow"/>
                 <polygon points="445,70 340,130 550,130" fill="#6d4c41"/>
                 <rect x="60" y="250" width="480" height="90" fill="#3e2723"/>
-                <g opacity="0.9">
-                  <ellipse cx="150" cy="260" rx="10" ry="4" fill="#ff9800"/>
-                  <ellipse cx="200" cy="265" rx="10" ry="4" fill="#ff9800"/>
-                  <ellipse cx="250" cy="260" rx="10" ry="4" fill="#ff9800"/>
-                  <ellipse cx="300" cy="265" rx="10" ry="4" fill="#ff9800"/>
+                <g opacity="0.95" class="path-diyas">
+                  <ellipse cx="150" cy="260" rx="10" ry="4" fill="#ff9800"/><circle cx="150" cy="252" r="5" fill="#fff59d"/>
+                  <ellipse cx="200" cy="265" rx="10" ry="4" fill="#ff9800"/><circle cx="200" cy="257" r="5" fill="#fff59d"/>
+                  <ellipse cx="250" cy="260" rx="10" ry="4" fill="#ff9800"/><circle cx="250" cy="252" r="5" fill="#fff59d"/>
+                  <ellipse cx="300" cy="265" rx="10" ry="4" fill="#ff9800"/><circle cx="300" cy="257" r="5" fill="#fff59d"/>
                 </g>
-                <!-- Brother -->
-                <g transform="translate(285,210)">
-                  <circle cx="0" cy="-40" r="16" fill="#8d5524"/>
-                  <rect x="-14" y="-25" width="28" height="55" rx="8" fill="#f5f0e6"/>
-                  <rect x="-12" y="-10" width="24" height="12" rx="4" fill="#d4a017" opacity="0.8"/>
-                  <rect x="10" y="-5" width="18" height="14" rx="3" fill="#ff7043"/>
-                  <circle cx="19" cy="2" r="4" fill="#ffd54f"/><circle cx="19" cy="-4" r="4" fill="#ffcc80"/>
+                <!-- Characters walking in -->
+                <g class="walkers">
+                  <g transform="translate(285,210)">
+                    <circle cx="0" cy="-40" r="16" fill="#8d5524"/>
+                    <rect x="-14" y="-25" width="28" height="55" rx="8" fill="#f5f0e6"/>
+                    <rect x="-12" y="-10" width="24" height="12" rx="4" fill="#d4a017" opacity="0.85"/>
+                    <rect x="10" y="-5" width="18" height="14" rx="3" fill="#ff7043"/>
+                    <circle cx="19" cy="2" r="4" fill="#ffd54f"/><circle cx="19" cy="-4" r="4" fill="#ffcc80"/>
+                    <text x="0" y="50" text-anchor="middle" fill="#ffe082" font-size="11" font-family="Kalam,cursive">Kaddu Bhaiya</text>
+                  </g>
+                  <g transform="translate(330,215)">
+                    <circle cx="0" cy="-38" r="14" fill="#8d5524"/>
+                    <path d="M-18,-22 L18,-22 L22,30 L-22,30 Z" fill="#ffb300"/>
+                    <rect x="-14" y="-8" width="28" height="10" rx="4" fill="#d94b3d" opacity="0.85"/>
+                    <text x="0" y="45" text-anchor="middle" fill="#ffe082" font-size="11" font-family="Kalam,cursive">Velvet</text>
+                  </g>
                 </g>
-                <!-- Sister -->
-                <g transform="translate(330,215)">
-                  <circle cx="0" cy="-38" r="14" fill="#8d5524"/>
-                  <path d="M-18,-22 L18,-22 L22,30 L-22,30 Z" fill="#ffb300"/>
-                  <rect x="-14" y="-8" width="28" height="10" rx="4" fill="#d94b3d" opacity="0.8"/>
-                </g>
-                <text x="300" y="320" text-anchor="middle" fill="#ffe082" font-family="Kalam, cursive" font-size="22">Kaddu Bhaiya &amp; Pyari Behen Velvet entering home together</text>
+                <text x="300" y="325" text-anchor="middle" fill="#ffe082" font-family="Kalam, cursive" font-size="20">Kaddu Bhaiya &amp; Pyari Behen Velvet entering home together</text>
               </svg>
             </div>
             <div class="scene-glow" aria-hidden="true"></div>
+            <div class="scene-sparkles" aria-hidden="true"></div>
           </div>
           <button id="phuljhadi-btn" class="btn-festive">Light the phuljhadi 🎆</button>
           <p class="scroll-hint">Scroll / swipe to turn the page ➜</p>
@@ -111,33 +124,52 @@
       <section class="page" data-page="2">
         <div class="page-inner paper message-page">
           <h2 class="title-hand">Kuch baatein dil se… 💌</h2>
-          <p class="subtitle">Tap each card to reveal</p>
-          <div class="flip-grid">
+          <p class="subtitle">Tap each card to reveal a little surprise for Pyari Behen Velvet</p>
+          <div class="flip-grid more-flips">
             <div class="flip-card" tabindex="0">
               <div class="flip-inner">
-                <div class="flip-front">Tap to reveal 🤫<br><small>Thing 1</small></div>
-                <div class="flip-back">Aap meri choti si princess hain, aur hamesha rahengi — no matter how big you grow!</div>
+                <div class="flip-front">Tap for a smile 🤫<br><small>Flip 1</small></div>
+                <div class="flip-back">Aap meri choti si princess hain, Velvet — aur hamesha rahengi, no matter how big you grow! 👑</div>
               </div>
             </div>
             <div class="flip-card" tabindex="0">
               <div class="flip-inner">
-                <div class="flip-front">Tap to reveal 🤫<br><small>Thing 2</small></div>
-                <div class="flip-back">Aapki hasi = mera sabse favourite vibe. Yeh smile hamesha bani rahe!</div>
+                <div class="flip-front">A tiny secret ✨<br><small>Flip 2</small></div>
+                <div class="flip-back">Aapki hasi = Kaddu Bhaiya ka sabse favourite vibe. Yeh smile hamesha bani rahe! 😊</div>
               </div>
             </div>
             <div class="flip-card" tabindex="0">
               <div class="flip-inner">
-                <div class="flip-front">Tap to reveal 🤫<br><small>Thing 3</small></div>
-                <div class="flip-back">Chahe kuch bhi ho, aapka Kaddu Bhaiya hamesha aapke saath hai. Pakka promise.</div>
+                <div class="flip-front">Surprise! 🎁<br><small>Flip 3</small></div>
+                <div class="flip-back">Aapne mera din itna wonderful bana diya sirf apni ek choti si baat ya smile se — you have that magic, Velvet! ✨</div>
+              </div>
+            </div>
+            <div class="flip-card" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">Open me 💛<br><small>Flip 4</small></div>
+                <div class="flip-back">Jab bhi aap khush hoti hain na, lagta hai ghar mein extra roshni aa gayi ho. Aap sach mein special hain.</div>
+              </div>
+            </div>
+            <div class="flip-card" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">One more thing 🌼<br><small>Flip 5</small></div>
+                <div class="flip-back">Bhai Dooj ho ya koi bhi din — aapka Kaddu Bhaiya hamesha aapke saath hai. Pakka promise. 🤝</div>
+              </div>
+            </div>
+            <div class="flip-card" tabindex="0">
+              <div class="flip-inner">
+                <div class="flip-front">Cute surprise 🧸<br><small>Flip 6</small></div>
+                <div class="flip-back">Aapke saath bitaya har chota moment ek pyari yaad ban jaata hai. Thank you for making my days wonderful, choti behen!</div>
               </div>
             </div>
             <div class="flip-card main-card" tabindex="0">
               <div class="flip-inner">
-                <div class="flip-front main-front">A special note for my Pyari Behen Velvet 💛<br><small>Tap to open</small></div>
+                <div class="flip-front main-front">A special note for my Pyari Behen Velvet 💛<br><small>Tap to open the big surprise</small></div>
                 <div class="flip-back main-back">
                   <p><strong>Happy Bhai Dooj, meri pyari choti behen Velvet!</strong></p>
                   <p>Is khaas din par bas yahi dua hai ki aapki zindagi hamesha khushiyon, pyaar aur success se bhari rahe. Aapka saath mere liye sabse special gift hai.</p>
-                  <p>Thank you for being <em>you</em> — cute, caring, and absolutely irreplaceable. Love you always!</p>
+                  <p>Aapne kitni baar bina kuch kahe mera din wonderful bana diya — bas apni masti, apni baaton aur apni pyaari si presence se. Thank you for being <em>you</em> — cute, caring, and absolutely irreplaceable.</p>
+                  <p>Love you always, Pyari Behen Velvet! 💛</p>
                   <p class="sign">— Aapka Kaddu Bhaiya</p>
                 </div>
               </div>
@@ -169,12 +201,12 @@
           <div class="wheel-stage">
             <button class="wheel-nav" id="wheel-prev" aria-label="Previous">‹</button>
             <div class="wheel" id="wheel">
-              <div class="polaroid" style="--i:0"><div class="polaroid-inner">🪔<p>Bhai Dooj vibes</p></div></div>
-              <div class="polaroid" style="--i:1"><div class="polaroid-inner">🏠<p>Entering home together</p></div></div>
-              <div class="polaroid" style="--i:2"><div class="polaroid-inner">🍬<p>Sweets & smiles</p></div></div>
-              <div class="polaroid" style="--i:3"><div class="polaroid-inner">✨<p>Festive lights</p></div></div>
-              <div class="polaroid" style="--i:4"><div class="polaroid-inner">💛<p>Always together</p></div></div>
-              <div class="polaroid" style="--i:5"><div class="polaroid-inner">📷<p>Memory coming soon</p></div></div>
+              <div class="polaroid" style="--i:0"><div class="polaroid-inner">🪔<p>Bhai Dooj with Velvet</p></div></div>
+              <div class="polaroid" style="--i:1"><div class="polaroid-inner">🏠<p>Velvet & Kaddu Bhaiya entering home</p></div></div>
+              <div class="polaroid" style="--i:2"><div class="polaroid-inner">🍬<p>Sweets & smiles together</p></div></div>
+              <div class="polaroid" style="--i:3"><div class="polaroid-inner">✨<p>Days you made wonderful</p></div></div>
+              <div class="polaroid" style="--i:4"><div class="polaroid-inner">💛<p>Pyari Behen, always</p></div></div>
+              <div class="polaroid" style="--i:5"><div class="polaroid-inner">📷<p>More memories coming soon</p></div></div>
             </div>
             <button class="wheel-nav" id="wheel-next" aria-label="Next">›</button>
           </div>
@@ -185,14 +217,24 @@
       <section class="page" data-page="5">
         <div class="page-inner paper gallery-page">
           <h2 class="title-hand">Photo Gallery 📸</h2>
-          <p class="subtitle">Frames ready — photos will be added soon!</p>
+          <p class="subtitle">Beautiful frames for Velvet & Kaddu Bhaiya — add your photos anytime!</p>
           <div class="gallery-grid" id="gallery-grid">
-            <div class="photo-frame placeholder"><span>Photo 1<br><small>coming soon</small></span></div>
-            <div class="photo-frame placeholder"><span>Photo 2<br><small>coming soon</small></span></div>
-            <div class="photo-frame placeholder"><span>Photo 3<br><small>coming soon</small></span></div>
-            <div class="photo-frame placeholder"><span>Photo 4<br><small>coming soon</small></span></div>
+            <figure class="photo-frame placeholder" data-slot="1"><span>Photo 1<br><small>coming soon</small></span></figure>
+            <figure class="photo-frame placeholder" data-slot="2"><span>Photo 2<br><small>coming soon</small></span></figure>
+            <figure class="photo-frame placeholder" data-slot="3"><span>Photo 3<br><small>coming soon</small></span></figure>
+            <figure class="photo-frame placeholder" data-slot="4"><span>Photo 4<br><small>coming soon</small></span></figure>
+            <figure class="photo-frame placeholder" data-slot="5"><span>Photo 5<br><small>coming soon</small></span></figure>
+            <figure class="photo-frame placeholder" data-slot="6"><span>Photo 6<br><small>coming soon</small></span></figure>
           </div>
-          <p class="hint-small">Tip: add photos later in <code>assets/photos/</code> and update the gallery in <code>index.html</code>.</p>
+          <div class="howto">
+            <h3>How to put images</h3>
+            <ol>
+              <li>Put your photos in <code>assets/photos/</code> (e.g. <code>photo1.jpg</code>, <code>photo2.jpg</code> … or any name).</li>
+              <li><strong>Easy way:</strong> name them <code>1.jpg</code>, <code>2.jpg</code>, <code>3.jpg</code> etc. (or .png/.jpeg/.webp) — they will auto-load into the frames above.</li>
+              <li><strong>Manual way:</strong> in <code>index.html</code>, replace a frame’s content with an image, like:<br><code>&lt;figure class="photo-frame"&gt;&lt;img src="assets/photos/yourphoto.jpg" alt="Memory"&gt;&lt;/figure&gt;</code></li>
+              <li>Save, refresh the page, and tap/click a photo to view it bigger (lightbox).</li>
+            </ol>
+          </div>
         </div>
       </section>
 
@@ -224,7 +266,7 @@
     <!-- Page dots -->
     <nav class="page-dots" id="page-dots" aria-label="Pages"></nav>
 
-    <!-- Music Player -->
+    <!-- Music Player & Sound -->
     <div class="music-player" id="music-player">
       <button id="music-toggle" class="music-btn" aria-label="Play music">▶</button>
       <div class="music-info">
@@ -232,6 +274,7 @@
         <div class="eq hidden" id="eq"><span></span><span></span><span></span></div>
       </div>
       <button id="music-next" class="music-btn small" aria-label="Next song">⏭</button>
+      <button id="sfx-toggle" class="music-btn small" aria-label="Toggle page turn sound" title="Page turn sound">🔊</button>
       <audio id="audio" preload="none"></audio>
     </div>
   </main>
