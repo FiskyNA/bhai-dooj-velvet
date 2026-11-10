@@ -407,18 +407,30 @@
     });
   }
 
-  // Virtual tilak
+  // Virtual tilak (supports optional photo: assets/photos/tilak.jpg|png|jpeg|webp)
   const tilakBtn = document.getElementById('tilak-btn');
-  const tilakForehead = document.getElementById('tilak-forehead');
+  const tilakWrap = document.getElementById('tilak-photo-wrap');
+  const tilakPhoto = document.getElementById('tilak-photo');
   const tilakMsg = document.getElementById('tilak-msg');
-  if (tilakBtn && tilakForehead) {
+  if (tilakPhoto && tilakWrap) {
+    const tryTilak = (i) => {
+      const exts = ['jpg','jpeg','png','webp'];
+      if (i >= exts.length) return;
+      const src = `assets/photos/tilak.${exts[i]}`;
+      const img = new Image();
+      img.onload = () => { tilakPhoto.src = src; tilakPhoto.classList.remove('hidden'); tilakWrap.classList.add('has-photo'); };
+      img.onerror = () => tryTilak(i + 1);
+      img.src = src;
+    };
+    tryTilak(0);
+  }
+  if (tilakBtn && tilakWrap) {
     tilakBtn.addEventListener('click', () => {
-      tilakForehead.classList.add('tilak-applied');
-      tilakForehead.textContent = '🙂';
+      tilakWrap.classList.add('applied');
       tilakMsg.classList.remove('hidden');
       tilakMsg.classList.add('show');
-      const r = tilakForehead.getBoundingClientRect();
-      burstSparkles(r.left + r.width/2, r.top, 24);
+      const r = tilakWrap.getBoundingClientRect();
+      burstSparkles(r.left + r.width/2, r.top + r.height*0.2, 24);
       tilakBtn.textContent = 'Tilak Applied ✅';
       tilakBtn.disabled = true;
     });

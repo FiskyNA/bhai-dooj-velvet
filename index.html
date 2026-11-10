@@ -236,7 +236,11 @@
           <h2 class="title-hand">Virtual Tilak & Blessings 🙏</h2>
           <p class="subtitle">Tap to apply tilak and receive blessings, Pyari Velvet</p>
           <div class="tilak-area" id="tilak-area">
-            <div class="tilak-forehead" id="tilak-forehead">🙂</div>
+            <div class="tilak-photo-wrap" id="tilak-photo-wrap">
+              <img id="tilak-photo" class="tilak-photo hidden" alt="Photo for tilak" />
+              <div class="tilak-forehead" id="tilak-forehead">🙂</div>
+              <div class="tilak-mark" id="tilak-mark" aria-hidden="true"></div>
+            </div>
             <button id="tilak-btn" class="btn-festive">Apply Tilak</button>
             <div id="tilak-msg" class="reveal-msg hidden">Tilak lag gaya! Dher saara pyaar, khushiyaan aur blessings for you, Pyari Velvet. 🪔</div>
           </div>
@@ -277,15 +281,6 @@
             <figure class="photo-frame placeholder" data-slot="4"><span>Photo 4<br><small>coming soon</small></span></figure>
             <figure class="photo-frame placeholder" data-slot="5"><span>Photo 5<br><small>coming soon</small></span></figure>
             <figure class="photo-frame placeholder" data-slot="6"><span>Photo 6<br><small>coming soon</small></span></figure>
-          </div>
-          <div class="howto">
-            <h3>How to put images</h3>
-            <ol>
-              <li>Put your photos in <code>assets/photos/</code> (e.g. <code>photo1.jpg</code>, <code>photo2.jpg</code> … or any name).</li>
-              <li><strong>Easy way:</strong> name them <code>1.jpg</code>, <code>2.jpg</code>, <code>3.jpg</code> etc. (or .png/.jpeg/.webp) — they will auto-load into the frames above.</li>
-              <li><strong>Manual way:</strong> in <code>index.html</code>, replace a frame’s content with an image, like:<br><code>&lt;figure class="photo-frame"&gt;&lt;img src="assets/photos/yourphoto.jpg" alt="Memory"&gt;&lt;/figure&gt;</code></li>
-              <li>Save, refresh the page, and tap/click a photo to view it bigger (lightbox).</li>
-            </ol>
           </div>
         </div>
       </section>

@@ -303,8 +303,12 @@ figure { margin: 0; }
 
 /* Tilak */
 .tilak-area { text-align:center; margin-top: 10px; }
-.tilak-forehead { width: 140px; height: 140px; margin: 10px auto 16px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #f6cfa3, #dba86b); display:flex; align-items:center; justify-content:center; font-size:3rem; position: relative; box-shadow: inset 0 -8px 16px rgba(0,0,0,.08), var(--shadow); }
-.tilak-forehead::after { content:""; position:absolute; top:28px; left:50%; transform:translateX(-50%) scale(0); width:18px; height:28px; background: linear-gradient(#d32f2f,#ff6f00); border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; transition: transform .5s cubic-bezier(.2,.8,.2,1.2); box-shadow:0 0 10px rgba(211,47,47,.5); }
-.tilak-forehead.tilak-applied::after { transform:translateX(-50%) scale(1); }
+.tilak-photo-wrap { position: relative; width: min(260px, 70vw); aspect-ratio: 1/1; margin: 10px auto 16px; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); background: #f6eddc; display:flex; align-items:center; justify-content:center; }
+.tilak-photo { position:absolute; inset:0; width:100%; height:100%; object-fit: cover; display:block; }
+.tilak-forehead { width: 140px; height: 140px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #f6cfa3, #dba86b); display:flex; align-items:center; justify-content:center; font-size:3rem; position: relative; box-shadow: inset 0 -8px 16px rgba(0,0,0,.08); z-index:1; }
+.tilak-mark { position:absolute; top:16%; left:50%; transform:translateX(-50%) scale(0); width:22px; height:34px; background: linear-gradient(#d32f2f,#ff6f00); border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; transition: transform .5s cubic-bezier(.2,.8,.2,1.2); box-shadow:0 0 12px rgba(211,47,47,.6); z-index:3; pointer-events:none; }
+.tilak-photo-wrap.applied .tilak-mark { transform:translateX(-50%) scale(1); }
+.tilak-photo-wrap.has-photo .tilak-forehead { display:none; }
+.tilak-photo-wrap.has-photo .tilak-mark { top:12%; width:26px; height:38px; }
 .tilak-page { text-align:center; }
 .fun-page { text-align:center; }
