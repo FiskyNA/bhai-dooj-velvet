@@ -316,10 +316,10 @@
     });
   }
 
-  // Music player: built-in cute tune (no files needed) + optional local files
+  // Music player
   const playlist = [
-    { title: 'Cute Bhai Dooj Tune (built-in)', type: 'builtin' },
-    // Add your own files here, e.g. { title: 'Raske Kamar', src: 'assets/music/raske-kamar.mp3' }
+    { title: 'Raske Kamar', src: 'assets/music/Raske Kamar.mp3' },
+    { title: 'Cat Sahiba', src: 'assets/music/Cat Sahiba.mp4' }
   ];
   let track = 0;
   let builtinPlaying = false;
