@@ -111,6 +111,8 @@ body {
 .page-inner { width: min(900px, 100%); max-height: 100%; overflow: auto; padding: 24px 22px 28px; position: relative; }
 .cover-page { text-align:center; }
 .scene-wrap { position: relative; width: 100%; max-width: 520px; margin: 0.5rem auto 1rem; border-radius: 16px; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,.15); background:#1a1a2e; min-height: 260px; }
+.scene-img { width: 100%; display:block; transform: scale(1.02); transition: transform .6s ease; }
+.scene-wrap:hover .scene-img { transform: scale(1.05); }
 .scene-glow { position:absolute; inset:0; background: radial-gradient(circle at 50% 60%, rgba(255,200,120,.35), transparent 60%); mix-blend-mode: screen; pointer-events:none; animation: glowPulse 3s ease-in-out infinite; }
 @keyframes glowPulse { 0%,100%{opacity:.5} 50%{opacity:1} }
 .scene-fallback { min-height:260px; align-items:center; justify-content:center; color:#fff; background:linear-gradient(#1a237e,#4e342e); }

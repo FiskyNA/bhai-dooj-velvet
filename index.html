@@ -47,7 +47,8 @@
           <p class="subtitle">From Aapka Kaddu Bhaiya, with all the love ✨</p>
           <div class="scene-wrap" id="scene-wrap">
             <div class="scene-layer sky"></div>
-            <div class="scene-fallback" id="scene-fallback" style="display:flex">
+            <img src="assets/hero-scene.png" alt="Kaddu Bhaiya in kurta holding sweets and Behen in kurti entering a warm lit house together" class="scene-img" id="scene-img" onerror="this.style.display='none';document.getElementById('scene-fallback').style.display='flex'"/>
+            <div class="scene-fallback" id="scene-fallback" style="display:none">
               <svg viewBox="0 0 600 340" class="fallback-svg" role="img" aria-label="Kaddu Bhaiya and Behen entering home together">
                 <defs>
                   <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a237e"/><stop offset="100%" stop-color="#4e342e"/></linearGradient>
@@ -238,6 +239,7 @@
   <!-- Lightbox -->
   <div id="lightbox" class="lightbox hidden" role="dialog" aria-label="Photo view">
     <button id="lightbox-close" class="lightbox-close" aria-label="Close">✕</button>
+    <img id="lightbox-img" alt="Gallery photo" />
   </div>
 
   <script src="script.js"></script>
